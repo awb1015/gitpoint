@@ -1,0 +1,77 @@
+{
+  "name": "gitpoint",
+  "displayName": "GitPoint",
+  "description": "Generate precise GitHub permalinks with a right-click",
+  "version": "1.0.0",
+  "publisher": "awb1015",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Other"],
+  "icon": "images/gitpoint-icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/awb1015/gitpoint"
+  },
+  "keywords": ["git", "github", "permalink", "link", "sharing"],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "sponsor": {
+    "url": "https://www.buymeacoffee.com/awb1015"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "gitpoint.generateLinePermalink",
+        "title": "Copy GitHub Permalink for Line",
+        "category": "GitPoint"
+      },
+      {
+        "command": "gitpoint.generateSelectionPermalink",
+        "title": "Copy GitHub Permalink for Selection",
+        "category": "GitPoint"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "gitpoint.generateSelectionPermalink",
+          "group": "1_modification",
+          "when": "editorHasSelection && editorTextFocus && !inDiffEditor"
+        },
+        {
+          "command": "gitpoint.generateLinePermalink",
+          "group": "1_modification",
+          "when": "!editorHasSelection && editorTextFocus && !inDiffEditor"
+        }
+      ],
+      "editor/lineNumber/context": [
+        {
+          "command": "gitpoint.generateLinePermalink",
+          "group": "1_modification",
+          "when": "editorTextFocus && !inDiffEditor"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^16.18.34",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.0",
+    "@typescript-eslint/parser": "^6.7.0",
+    "eslint": "^8.26.0",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.1.3"
+  }
+}
