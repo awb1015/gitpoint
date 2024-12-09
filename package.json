@@ -23,12 +23,12 @@
     "commands": [
       {
         "command": "gitpoint.generateLinePermalink",
-        "title": "Copy GitHub Permalink for Line",
+        "title": "Copy Permalink for Line",
         "category": "GitPoint"
       },
       {
         "command": "gitpoint.generateSelectionPermalink",
-        "title": "Copy GitHub Permalink for Selection",
+        "title": "Copy Permalink for Selection",
         "category": "GitPoint"
       }
     ],
