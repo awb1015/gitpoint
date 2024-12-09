@@ -17,7 +17,7 @@ interface LineRange {
     end: number;
 }
 
-enum HostType {
+export enum HostType {
     GitHub = 'github',
     GitLab = 'gitlab',
     Bitbucket = 'bitbucket',

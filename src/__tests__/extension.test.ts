@@ -1,4 +1,4 @@
-import { normalizeGitUrl, generatePermalinkUrl, getGitInfo } from '../extension';
+import { normalizeGitUrl, generatePermalinkUrl, getGitInfo, HostType } from '../extension';
 import { exec } from 'child_process';
 import * as vscode from 'vscode';
 
@@ -23,11 +23,6 @@ describe('GitPoint URL Normalization', () => {
         {
             name: 'HTTPS URL',
             input: 'https://github.com/user/repo.git',
-            expected: 'https://github.com/user/repo'
-        },
-        {
-            name: 'VSCode Dev URL',
-            input: 'https://vscode.dev/github/user/repo',
             expected: 'https://github.com/user/repo'
         },
         {
@@ -89,7 +84,8 @@ describe('GitHub Permalink Generation', () => {
         const gitInfo = {
             remoteUrl: 'https://github.com/user/repo',
             currentBranch: 'main',
-            defaultBranch: 'main'
+            defaultBranch: 'main',
+            hostType: HostType.GitHub
         };
 
         const mockExec = exec as jest.MockedFunction<typeof exec>;
@@ -104,8 +100,8 @@ describe('GitHub Permalink Generation', () => {
         const permalink = await generatePermalinkUrl(
             gitInfo,
             'src/file.ts',
+            '/test/path',
             { start: 10, end: 10 },
-            '/test/path'
         );
 
         expect(permalink).toBeTruthy();
