@@ -1,4 +1,4 @@
-import { normalizeGitHubUrl, generateGitHubPermalink, getGitInfo } from '../extension';
+import { normalizeGitUrl, generatePermalinkUrl, getGitInfo } from '../extension';
 import { exec } from 'child_process';
 import * as vscode from 'vscode';
 
@@ -39,13 +39,13 @@ describe('GitPoint URL Normalization', () => {
 
     testCases.forEach(({ name, input, expected }) => {
         test(`normalizes ${name}`, () => {
-            expect(normalizeGitHubUrl(input)).toBe(expected);
+            expect(normalizeGitUrl(input)).toBe(expected);
         });
     });
 
     test('handles malformed URLs gracefully', () => {
         const malformedUrl = 'not-a-github-url';
-        expect(() => normalizeGitHubUrl(malformedUrl)).not.toThrow();
+        expect(() => normalizeGitUrl(malformedUrl)).not.toThrow();
     });
 });
 
@@ -101,7 +101,7 @@ describe('GitHub Permalink Generation', () => {
             return {} as any;
         });
 
-        const permalink = await generateGitHubPermalink(
+        const permalink = await generatePermalinkUrl(
             gitInfo,
             'src/file.ts',
             { start: 10, end: 10 },

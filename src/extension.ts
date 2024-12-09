@@ -36,7 +36,7 @@ function detectHostType(url: string): HostType {
     return HostType.Unknown;
 }
 
-function normalizeGitUrl(url: string): string {
+export function normalizeGitUrl(url: string): string {
     // Remove any vscode.dev prefix
     url = url.replace('vscode.dev/', '');
     
@@ -90,7 +90,7 @@ function normalizeGitUrl(url: string): string {
               .replace(/^git:\/\//, 'https://');
 }
 
-async function getGitInfo(workspacePath: string): Promise<GitInfo | null> {
+export async function getGitInfo(workspacePath: string): Promise<GitInfo | null> {
     try {
         // Get remote URL
         const { stdout: remoteUrl } = await execAsync('git config --get remote.origin.url', { cwd: workspacePath });
@@ -118,7 +118,7 @@ async function getGitInfo(workspacePath: string): Promise<GitInfo | null> {
     }
 }
 
-function generatePermalinkUrl(
+export function generatePermalinkUrl(
     gitInfo: GitInfo,
     commitHash: string,
     relativePath: string,
