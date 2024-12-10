@@ -2,17 +2,23 @@
 import * as vscode from 'vscode';
 import { exec } from 'child_process';
 import { promisify } from 'util';
+import { 
+    openInBrowser, 
+    viewFileHistory, 
+    blameFile 
+} from './commands';
+
 
 const execAsync = promisify(exec);
 
-interface GitInfo {
+export interface GitInfo {
     remoteUrl: string;
     currentBranch: string;
     defaultBranch: string;
     hostType: HostType;
 }
 
-interface LineRange {
+export interface LineRange {
     start: number;
     end: number;
 }
@@ -92,19 +98,34 @@ export function normalizeGitUrl(url: string): string {
 
 export async function getGitInfo(workspacePath: string): Promise<GitInfo | null> {
     try {
+        console.log('Getting git info for workspace:', workspacePath);
+        
         // Get remote URL
-        const { stdout: remoteUrl } = await execAsync('git config --get remote.origin.url', { cwd: workspacePath });
+        const { stdout: remoteUrl } = await execAsync('git config --get remote.origin.url', { 
+            cwd: workspacePath,
+            env: { ...process.env, PATH: process.env.PATH }  // Ensure git is in PATH
+        });
+        console.log('Remote URL:', remoteUrl);
+        
         const normalizedUrl = normalizeGitUrl(remoteUrl.trim());
         const hostType = detectHostType(normalizedUrl);
         
         // Get current branch
-        const { stdout: currentBranch } = await execAsync('git rev-parse --abbrev-ref HEAD', { cwd: workspacePath });
+        const { stdout: currentBranch } = await execAsync('git rev-parse --abbrev-ref HEAD', { 
+            cwd: workspacePath,
+            env: { ...process.env, PATH: process.env.PATH }
+        });
+        console.log('Current branch:', currentBranch);
         
         // Get default branch
         const { stdout: defaultBranch } = await execAsync(
             'git remote show origin | grep "HEAD branch" | cut -d: -f2',
-            { cwd: workspacePath }
+            { 
+                cwd: workspacePath,
+                env: { ...process.env, PATH: process.env.PATH }
+            }
         );
+        console.log('Default branch:', defaultBranch);
 
         return {
             remoteUrl: normalizedUrl,
@@ -208,7 +229,50 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
-    context.subscriptions.push(linePermalink, selectionPermalink);
+    let browserCommand = vscode.commands.registerCommand('gitpoint.openInBrowser', async () => {
+        console.log('openInBrowser command triggered');
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            console.log('Active editor found:', editor.document.uri.fsPath);
+            await openInBrowser(editor.document.uri);
+        } else {
+            console.log('No active editor');
+            vscode.window.showErrorMessage('No active text editor');
+        }
+    });
+
+    let historyCommand = vscode.commands.registerCommand('gitpoint.viewFileHistory', async () => {
+        console.log('viewFileHistory command triggered');
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            console.log('Active editor found:', editor.document.uri.fsPath);
+            await viewFileHistory(editor.document.uri);
+        } else {
+            console.log('No active editor');
+            vscode.window.showErrorMessage('No active text editor');
+        }
+    });
+
+    let blameCommand = vscode.commands.registerCommand('gitpoint.blameFile', async () => {
+        console.log('blameFile command triggered');
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            console.log('Active editor found:', editor.document.uri.fsPath);
+            await blameFile(editor.document.uri);
+        } else {
+            console.log('No active editor');
+            vscode.window.showErrorMessage('No active text editor');
+        }
+    });
+
+    // Register all commands in context.subscriptions
+    context.subscriptions.push(
+        linePermalink,
+        selectionPermalink,
+        browserCommand,
+        historyCommand,
+        blameCommand
+    );
 }
 
 export function deactivate() {}

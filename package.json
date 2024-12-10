@@ -2,7 +2,7 @@
   "name": "gitpoint",
   "displayName": "GitPoint",
   "description": "Generate precise GitHub permalinks with a right-click",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "publisher": "awb1015",
   "engines": {
     "vscode": "^1.85.0"
@@ -30,7 +30,23 @@
         "command": "gitpoint.generateSelectionPermalink",
         "title": "Copy Permalink for Selection",
         "category": "GitPoint"
+      },
+      {
+        "command": "gitpoint.openInBrowser",
+        "title": "Open in Browser",
+        "category": "GitPoint"
+      },
+      {
+        "command": "gitpoint.viewFileHistory",
+        "title": "View File History",
+        "category": "GitPoint"
+      },
+      {
+        "command": "gitpoint.blameFile",
+        "title": "View Blame",
+        "category": "GitPoint"
       }
+
     ],
     "menus": {
       "editor/context": [
@@ -43,6 +59,16 @@
           "command": "gitpoint.generateLinePermalink",
           "group": "1_modification",
           "when": "!editorHasSelection && editorTextFocus && !inDiffEditor"
+        },
+        {
+          "command": "gitpoint.openInBrowser",
+          "group": "navigation",
+          "when": "editorTextFocus"
+        },
+        {
+          "command": "gitpoint.blameFile",
+          "group": "navigation",
+          "when": "editorTextFocus"
         }
       ],
       "editor/lineNumber/context": [
@@ -50,6 +76,20 @@
           "command": "gitpoint.generateLinePermalink",
           "group": "1_modification",
           "when": "editorTextFocus && !inDiffEditor"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "gitpoint.openInBrowser",
+          "group": "navigation"
+        },
+        {
+          "command": "gitpoint.viewFileHistory",
+          "group": "navigation"
+        },
+        {
+          "command": "gitpoint.blameFile",
+          "group": "navigation"
         }
       ]
     }
