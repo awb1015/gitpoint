@@ -49,7 +49,9 @@ None reported yet! If you find any issues, please report them on our [GitHub rep
 
 ### 1.1.0
 
+Additions
 - Added support for GitLab and Bitbucket
+- Added commands to open a file in browser, open blame in browser and view file history
 
 ### 1.0.0
 
