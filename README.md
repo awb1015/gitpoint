@@ -11,6 +11,7 @@ Generate and share precise permalinks for Github, GitLab and Bitbucket with a si
 - 🔄 Supports both SSH and HTTPS repository URLs
 - 📋 Copies links directly to your clipboard
 - 💡 Smart fallback to default branch when needed
+- 🖥️ Open files on remote and instantly view blame or diff
 
 ## Usage
 

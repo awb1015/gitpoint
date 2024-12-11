@@ -13,7 +13,7 @@
     "type": "git",
     "url": "https://github.com/awb1015/gitpoint"
   },
-  "keywords": ["git", "github", "permalink", "link", "sharing"],
+  "keywords": ["git", "github", "bitbucket", "gitlab", "permalink", "link", "sharing"],
   "activationEvents": [],
   "main": "./out/extension.js",
   "sponsor": {
