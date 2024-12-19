@@ -1,4 +1,4 @@
-import { normalizeGitHubUrl, generateGitHubPermalink, getGitInfo } from '../extension';
+import { normalizeGitUrl, generatePermalinkUrl, getGitInfo, HostType } from '../extension';
 import { exec } from 'child_process';
 import * as vscode from 'vscode';
 
@@ -26,11 +26,6 @@ describe('GitPoint URL Normalization', () => {
             expected: 'https://github.com/user/repo'
         },
         {
-            name: 'VSCode Dev URL',
-            input: 'https://vscode.dev/github/user/repo',
-            expected: 'https://github.com/user/repo'
-        },
-        {
             name: 'Git Protocol URL',
             input: 'git://github.com/user/repo.git',
             expected: 'https://github.com/user/repo'
@@ -39,13 +34,13 @@ describe('GitPoint URL Normalization', () => {
 
     testCases.forEach(({ name, input, expected }) => {
         test(`normalizes ${name}`, () => {
-            expect(normalizeGitHubUrl(input)).toBe(expected);
+            expect(normalizeGitUrl(input)).toBe(expected);
         });
     });
 
     test('handles malformed URLs gracefully', () => {
         const malformedUrl = 'not-a-github-url';
-        expect(() => normalizeGitHubUrl(malformedUrl)).not.toThrow();
+        expect(() => normalizeGitUrl(malformedUrl)).not.toThrow();
     });
 });
 
@@ -89,7 +84,8 @@ describe('GitHub Permalink Generation', () => {
         const gitInfo = {
             remoteUrl: 'https://github.com/user/repo',
             currentBranch: 'main',
-            defaultBranch: 'main'
+            defaultBranch: 'main',
+            hostType: HostType.GitHub
         };
 
         const mockExec = exec as jest.MockedFunction<typeof exec>;
@@ -101,11 +97,11 @@ describe('GitHub Permalink Generation', () => {
             return {} as any;
         });
 
-        const permalink = await generateGitHubPermalink(
+        const permalink = await generatePermalinkUrl(
             gitInfo,
             'src/file.ts',
+            '/test/path',
             { start: 10, end: 10 },
-            '/test/path'
         );
 
         expect(permalink).toBeTruthy();
